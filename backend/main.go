@@ -1,7 +1,22 @@
 package main
 
-import "fmt"
+import (
+	"log"
+
+	"github.com/gin-gonic/gin"
+	"github.com/toybox97/go-sse/config"
+	"github.com/toybox97/go-sse/routes"
+)
 
 func main() {
-	fmt.Println("こんにちわ！")
+	cfg := config.LoadConfig()
+	
+	r := gin.Default()
+	
+	routes.SetupRoutes(r)
+	
+	log.Printf("Server starting on port %s", cfg.Port)
+	if err := r.Run(cfg.GetAddr()); err != nil {
+		log.Fatal("Failed to start server:", err)
+	}
 }
